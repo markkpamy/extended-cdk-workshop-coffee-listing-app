@@ -8,7 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "build:jsii": "jsii --strict && jsii-pacmak"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.84",
@@ -18,13 +19,44 @@
     "aws-sdk": "2.1016.0",
     "esbuild": "0.13.10",
     "jest": "27.3.1",
+    "jsii": "1.52.1",
+    "jsii-pacmak": "1.52.1",
     "ts-jest": "27.0.7",
     "ts-node": "10.4.0",
-    "typescript": "4.4.4"
+    "typescript": "4.4.4",
+    "aws-cdk-lib": "2.0.0-rc.23",
+    "constructs": "10.0.9"
   },
   "dependencies": {
     "aws-cdk-lib": "2.0.0-rc.23",
     "constructs": "10.0.9",
     "source-map-support": "0.5.20"
+  },
+  "author": {
+    "name": "Example Person",
+    "email": "person@email.com"
+  },
+  "main": "lib/coffee-listing-app-stack.js",
+  "types": "lib/coffee-listing-app-stack.d.ts",
+  "repository": {
+    "url": "https://github.com/markkpamy/extended-cdk-workshop-coffee-listing-app.git",
+    "type": "git"
+  },
+  "license": "MIT",
+  "jsii": {
+    "outdir": "dist",
+    "targets": {
+      "python": {
+        "distName": "cdk-workshop.coffee-listing-app",
+        "module": "cdk_workshop.coffee_listing_app"
+      }
+    }
+  },
+  "bundledDependencies": [
+    "source-map-support"
+  ],
+  "peerDependencies": {
+    "aws-cdk-lib": "2.0.0-rc.23",
+    "constructs": "10.0.9"
   }
 }
