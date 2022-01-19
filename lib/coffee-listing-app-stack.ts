@@ -4,7 +4,6 @@ import { WebsiteHostingStack } from "./website-hosting-stack";
 import {Construct} from 'constructs';
 import * as pipelines from "aws-cdk-lib/pipelines";
 import * as iam from "aws-cdk-lib/aws-iam";
-import {CodeBuildStep} from 'aws-cdk-lib/pipelines';
 
 export class CoffeeListingAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -16,14 +15,14 @@ export class CoffeeListingAppStack extends cdk.Stack {
       pipelineName: `Pipeline-${this.stackName}`,
       selfMutation: false,
       publishAssetsInParallel: false,
-      synth: new CodeBuildStep("Synth", {
+      synth: new pipelines.ShellStep("Synth", {
         input: pipelines.CodePipelineSource.connection(
             "markkpamy/extended-cdk-workshop-coffee-listing-app",
             "main",
             {
               connectionArn: "arn:aws:codestar-connections:eu-west-3:407400551832:connection/426860c9-aa75-4b9d-b78f-52db0c2b436d"
             }),
-        commands: ["npm ci", "npm run build", "npx cdk synth"],
+        commands: ["npm install", "npm run build", "npx cdk synth"],
       }),
       codeBuildDefaults: {
         rolePolicy: [
