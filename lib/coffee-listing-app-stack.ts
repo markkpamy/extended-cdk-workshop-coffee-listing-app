@@ -22,6 +22,9 @@ export class CoffeeListingAppStack extends cdk.Stack {
             {
               connectionArn: "arn:aws:codestar-connections:eu-west-3:407400551832:connection/426860c9-aa75-4b9d-b78f-52db0c2b436d"
             }),
+        installCommands: [
+          'npm install -g aws-cdk'
+        ],
         commands: ["npm install", "npm run build", "npx cdk synth"],
       }),
       codeBuildDefaults: {
