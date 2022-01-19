@@ -13,7 +13,7 @@ export class CoffeeListingAppStack extends cdk.Stack {
 
     let pipeline = new pipelines.CodePipeline(this, "Pipeline", {
       pipelineName: `Pipeline-${this.stackName}`,
-      selfMutation: true,
+      selfMutation: false,
       publishAssetsInParallel: false,
       synth: new pipelines.ShellStep("Synth", {
         input: pipelines.CodePipelineSource.connection(
@@ -22,9 +22,6 @@ export class CoffeeListingAppStack extends cdk.Stack {
             {
               connectionArn: "arn:aws:codestar-connections:eu-west-3:407400551832:connection/426860c9-aa75-4b9d-b78f-52db0c2b436d"
             }),
-        installCommands: [
-          'npm install -g aws-cdk'
-        ],
         commands: ["npm install", "npm run build", "npx cdk synth"],
       }),
       codeBuildDefaults: {
