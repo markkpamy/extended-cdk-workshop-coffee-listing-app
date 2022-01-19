@@ -2,18 +2,12 @@ import * as cdk from "aws-cdk-lib";
 import { RestApiStack } from "./rest-api-stack";
 import { WebsiteHostingStack } from "./website-hosting-stack";
 import {Construct} from 'constructs';
-import * as codecommit from "aws-cdk-lib/aws-codecommit";
 import * as pipelines from "aws-cdk-lib/pipelines";
 import * as iam from "aws-cdk-lib/aws-iam";
 
 export class CoffeeListingAppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    let repository = new codecommit.Repository(this, "Repository", {
-      repositoryName: `Repository-${this.stackName}`,
-      description: "Code Repository for Coffee Listing",
-    });
 
     let appStage = new AppStage(this, "AppStage", { stackName: this.stackName });
 
@@ -64,11 +58,6 @@ export class CoffeeListingAppStack extends cdk.Stack {
           ],
         }),
       ],
-    });
-
-    new cdk.CfnOutput(this, "RepositoryCloneUrlHttp", {
-      value: repository.repositoryCloneUrlHttp,
-      description: "Code Repository Clone Url Http",
     });
   }
 }
