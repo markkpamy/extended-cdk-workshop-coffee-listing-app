@@ -25,7 +25,7 @@ export class CoffeeListingAppStack extends cdk.Stack {
         installCommands: [
           'npm install -g aws-cdk'
         ],
-        commands: ["npm install", "npm run build", "npx cdk synth"],
+        commands: ["npm ci", "npm run build", "npx cdk synth"],
       }),
       codeBuildDefaults: {
         rolePolicy: [
