@@ -5,11 +5,33 @@ import {Construct} from 'constructs';
 import * as pipelines from "aws-cdk-lib/pipelines";
 import * as iam from "aws-cdk-lib/aws-iam";
 
+export interface CoffeeListingAppStackProps extends cdk.StackProps {
+  readonly synthCommands: Array<string>;
+  readonly codeBuildPolicies?: Array<iam.PolicyStatement>;
+}
+
 export class CoffeeListingAppStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: CoffeeListingAppStackProps) {
     super(scope, id, props);
 
     let appStage = new AppStage(this, "AppStage", { stackName: this.stackName });
+
+    let buildPolicies = [
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["s3:*"],
+        resources: ["*"],
+      }),
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["cloudfront:*"],
+        resources: ["*"],
+      }),
+    ];
+
+    if (props.codeBuildPolicies) {
+      buildPolicies = buildPolicies.concat(props.codeBuildPolicies);
+    }
 
     let pipeline = new pipelines.CodePipeline(this, "Pipeline", {
       pipelineName: `Pipeline-${this.stackName}`,
@@ -22,21 +44,10 @@ export class CoffeeListingAppStack extends cdk.Stack {
             {
               connectionArn: "arn:aws:codestar-connections:eu-west-3:407400551832:connection/426860c9-aa75-4b9d-b78f-52db0c2b436d"
             }),
-        commands: ["npm install", "npm run build", "npx cdk synth"],
+        commands: props.synthCommands,
       }),
       codeBuildDefaults: {
-        rolePolicy: [
-          new iam.PolicyStatement({
-            effect: iam.Effect.ALLOW,
-            actions: ["s3:*"],
-            resources: ["*"],
-          }),
-          new iam.PolicyStatement({
-            effect: iam.Effect.ALLOW,
-            actions: ["cloudfront:*"],
-            resources: ["*"],
-          }),
-        ],
+        rolePolicy: buildPolicies,
       },
     });
 
