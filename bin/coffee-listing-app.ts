@@ -7,6 +7,7 @@ import { CodeArtifactStack } from "../lib/code-artifact-stack";
 const app = new cdk.App();
 new CoffeeListingAppStack(app, "CoffeeListingAppStack", {
   stackName: "CoffeeListingAppStack",
+  synthCommands: ["npm ci", "npm run build", "npx cdk synth"],
 });
 new CodeArtifactStack(app, "CodeArtifactStack", {
   stackName: "CodeArtifactStack",
